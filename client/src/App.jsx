@@ -4,15 +4,15 @@ import './App.css'
 
 function App() {
   useEffect(() => {
-    API.get("/health")
-      .then(res => console.log("Backend response:", res.data))
-      .catch(err => console.error("Error connecting to backend:", err));
+    API.get("/profile/anita")
+      .then(res => console.log("Profile API response:", res.data))
+      .catch(err => console.error("Error:", err));
   }, []);
 
   return (
     <div className="container">
       <h1>Developer Portfolio Evaluator 🚀</h1>
-      <p>Open the browser console to see the backend connection test</p>
+      <p>Open the browser console to see the profile API test</p>
     </div>
   );
 }
