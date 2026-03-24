@@ -1,3 +1,5 @@
+const { getUser } = require("../services/githubService");
+
 const getProfile = async (req, res) => {
   const { username } = req.params;
 
@@ -6,32 +8,21 @@ const getProfile = async (req, res) => {
   }
 
   try {
-    const profileResponse = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
-      headers: {
-        "User-Agent": "Portfolio-Evaluator",
-        Accept: "application/vnd.github.v3+json",
-      },
+    const profileData = await getUser(username);
+
+    // Also fetch repos using Octokit
+    const { Octokit } = require("@octokit/rest");
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_TOKEN,
     });
 
-    if (profileResponse.status === 404) {
-      return res.status(404).json({ error: "GitHub user not found" });
-    }
-
-    if (!profileResponse.ok) {
-      const errorBody = await profileResponse.text();
-      return res.status(profileResponse.status).json({ error: "GitHub API error", details: errorBody });
-    }
-
-    const profileData = await profileResponse.json();
-
-    const reposResponse = await fetch(profileData.repos_url, {
-      headers: {
-        "User-Agent": "Portfolio-Evaluator",
-        Accept: "application/vnd.github.v3+json",
-      },
+    const reposResponse = await octokit.repos.listForUser({
+      username,
+      sort: "updated",
+      per_page: 10,
     });
 
-    const reposData = reposResponse.ok ? await reposResponse.json() : [];
+    const reposData = reposResponse.data;
 
     return res.json({
       profile: profileData,
@@ -39,8 +30,13 @@ const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching GitHub profile:", error);
+    if (error.status === 404) {
+      return res.status(404).json({ error: "GitHub user not found" });
+    }
     return res.status(500).json({ error: "Server Error" });
   }
 };
+
+module.exports = { getProfile };
 
 module.exports = { getProfile };
