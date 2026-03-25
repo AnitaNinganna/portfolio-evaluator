@@ -1,4 +1,8 @@
-const { getUser } = require("../services/githubService");
+const { getCompleteGitHubData } = require("../services/githubService");
+const {
+  generateCompleteScore,
+  generateReport,
+} = require("../services/scoringService");
 
 const getProfile = async (req, res) => {
   const { username } = req.params;
@@ -8,25 +12,23 @@ const getProfile = async (req, res) => {
   }
 
   try {
-    const profileData = await getUser(username);
+    // Step 1: Fetch and structure GitHub data
+    const githubData = await getCompleteGitHubData(username);
 
-    // Also fetch repos using Octokit
-    const { Octokit } = require("@octokit/rest");
-    const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN,
-    });
+    // Step 2: Generate scoring evaluation
+    const scoring = generateCompleteScore(githubData);
 
-    const reposResponse = await octokit.repos.listForUser({
-      username,
-      sort: "updated",
-      per_page: 10,
-    });
+    // Step 3: Generate human-readable report
+    const report = generateReport(scoring, githubData);
 
-    const reposData = reposResponse.data;
-
+    // Step 4: Return comprehensive response
     return res.json({
-      profile: profileData,
-      repos: reposData,
+      profile: githubData.profile,
+      repos: githubData.repos,
+      languages: githubData.languages,
+      topRepos: githubData.topRepos,
+      scoring,
+      report,
     });
   } catch (error) {
     console.error("Error fetching GitHub profile:", error);
@@ -36,7 +38,5 @@ const getProfile = async (req, res) => {
     return res.status(500).json({ error: "Server Error" });
   }
 };
-
-module.exports = { getProfile };
 
 module.exports = { getProfile };
