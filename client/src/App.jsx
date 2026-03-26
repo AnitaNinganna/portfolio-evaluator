@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import API from "./utils/api";
+import Home from "./components/Home";
 import './App.css'
 
 function App() {
@@ -10,9 +11,8 @@ function App() {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Developer Portfolio Evaluator 🚀</h1>
-      <p>Open the browser console to see the profile API test</p>
+    <div className="App">
+      <Home />
     </div>
   );
 }
