@@ -1,18 +1,15 @@
-import { useEffect } from "react";
-import API from "./utils/api";
-import Home from "./components/Home";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Report from "./pages/Report";
 import './App.css'
 
 function App() {
-  useEffect(() => {
-    API.get("/profile/anita")
-      .then(res => console.log("Profile API response:", res.data))
-      .catch(err => console.error("Error:", err));
-  }, []);
-
   return (
     <div className="App">
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/report/:username" element={<Report />} />
+      </Routes>
     </div>
   );
 }

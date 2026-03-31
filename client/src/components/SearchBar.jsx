@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SearchBar.css';
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      console.log('Searching for:', searchTerm);
-      // TODO: Implement search functionality
+      navigate(`/report/${searchTerm}`);
+      setSearchTerm('');
     }
   };
 
