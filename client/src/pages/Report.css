@@ -151,20 +151,10 @@
   font-size: 1.5rem;
 }
 
-/* Score Container */
-.score-container {
+/* Score Section */
+.score-section {
   display: flex;
   justify-content: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  border-radius: 8px;
-}
-
-.score-value {
-  font-size: 3rem;
-  font-weight: bold;
-  color: white;
-  margin: 0;
 }
 
 /* Repositories Grid */

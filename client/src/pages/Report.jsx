@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../utils/api';
+import ScoreCard from '../components/ScoreCard';
 import './Report.css';
 
 const Report = () => {
@@ -93,11 +94,11 @@ const Report = () => {
 
           <div className="report-sections">
             {report?.scoring && (
-              <div className="report-section">
-                <h2>Overall Score</h2>
-                <div className="score-container">
-                  <p className="score-value">{report.scoring.overallScore.toFixed(1)}/100</p>
-                </div>
+              <div className="report-section score-section">
+                <ScoreCard 
+                  score={report.scoring.overall?.score || report.scoring.overallScore} 
+                  scoringData={report.scoring}
+                />
               </div>
             )}
 
