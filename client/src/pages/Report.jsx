@@ -92,6 +92,14 @@ const Report = () => {
               <span className="stat-label">Public Repos</span>
               <span className="stat-value">{profile.publicRepos}</span>
             </div>
+            <div className="stat">
+              <span className="stat-label">Total Stars</span>
+              <span className="stat-value">{profile.totalStars || 0}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-label">Contributions</span>
+              <span className="stat-value">{profile.contributions || 0}</span>
+            </div>
           </div>
 
           <div className="report-sections">
@@ -154,6 +162,50 @@ const Report = () => {
               <div className="report-section">
                 <h2>Detailed Report</h2>
                 <div className="report-text">{report.report}</div>
+              </div>
+            )}
+
+            {report?.scoring && (
+              <div className="report-section recommendations-section">
+                <h2>Recommendations</h2>
+                <div className="recommendations">
+                  {report.scoring.activity < 60 && (
+                    <div className="recommendation">
+                      <h3>🚀 Boost Activity</h3>
+                      <p>Increase your GitHub activity by contributing regularly to open-source projects or maintaining your own repositories.</p>
+                    </div>
+                  )}
+                  {report.scoring.codeQuality < 60 && (
+                    <div className="recommendation">
+                      <h3>💻 Improve Code Quality</h3>
+                      <p>Focus on writing clean, well-documented code. Use linters, write tests, and follow best practices.</p>
+                    </div>
+                  )}
+                  {report.scoring.diversity < 60 && (
+                    <div className="recommendation">
+                      <h3>🌍 Increase Language Diversity</h3>
+                      <p>Explore new programming languages and technologies to broaden your skill set.</p>
+                    </div>
+                  )}
+                  {report.scoring.community < 60 && (
+                    <div className="recommendation">
+                      <h3>🤝 Build Community</h3>
+                      <p>Engage with the developer community through issues, pull requests, and discussions.</p>
+                    </div>
+                  )}
+                  {report.scoring.hiringReadiness < 60 && (
+                    <div className="recommendation">
+                      <h3>📋 Enhance Hiring Readiness</h3>
+                      <p>Update your profile with a professional bio, pin important repositories, and highlight your achievements.</p>
+                    </div>
+                  )}
+                  {report.scoring.activity >= 80 && report.scoring.codeQuality >= 80 && (
+                    <div className="recommendation positive">
+                      <h3>🎉 Excellent Portfolio!</h3>
+                      <p>Your portfolio demonstrates strong technical skills and activity. Keep up the great work!</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
