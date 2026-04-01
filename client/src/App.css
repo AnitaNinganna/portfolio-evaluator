@@ -16,3 +16,7 @@ p {
   margin: 20px 0;
   color: rgba(255, 255, 255, 0.87);
 }
+
+.App {
+  padding-top: 80px; /* Adjust for fixed navbar height */
+}
