@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../utils/api';
 import ScoreCard from '../components/ScoreCard';
+import RadarChart from '../components/RadarChart';
+import LanguageBarChart from '../components/LanguageBarChart';
 import './Report.css';
 
 const Report = () => {
@@ -99,6 +101,28 @@ const Report = () => {
                   score={report.scoring.overall?.score || report.scoring.overallScore} 
                   scoringData={report.scoring}
                 />
+              </div>
+            )}
+
+            {report?.scoring && (
+              <div className="report-section charts-section">
+                <h2>Portfolio Scores Breakdown</h2>
+                <RadarChart 
+                  scores={{
+                    activity: report.scoring.activity || 0,
+                    codeQuality: report.scoring.codeQuality || 0,
+                    diversity: report.scoring.diversity || 0,
+                    community: report.scoring.community || 0,
+                    hiringReadiness: report.scoring.hiringReadiness || 0,
+                  }}
+                />
+              </div>
+            )}
+
+            {report?.languages && report.languages.length > 0 && (
+              <div className="report-section charts-section">
+                <h2>Language Distribution</h2>
+                <LanguageBarChart languages={report.languages} />
               </div>
             )}
 
