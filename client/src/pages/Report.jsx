@@ -4,6 +4,7 @@ import API from '../utils/api';
 import ScoreCard from '../components/ScoreCard';
 import RadarChart from '../components/RadarChart';
 import LanguageBarChart from '../components/LanguageBarChart';
+import RepoList from '../components/RepoList';
 import './Report.css';
 
 const Report = () => {
@@ -134,27 +135,9 @@ const Report = () => {
               </div>
             )}
 
-            {report?.topRepos && report.topRepos.length > 0 && (
+            {report?.topRepos && (
               <div className="report-section">
-                <h2>Top Repositories</h2>
-                <div className="repos-grid">
-                  {report.topRepos.map((repo, idx) => (
-                    <a
-                      key={idx}
-                      href={repo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="repo-card"
-                    >
-                      <h3>{repo.name}</h3>
-                      <p>{repo.description || 'No description'}</p>
-                      <div className="repo-meta">
-                        {repo.language && <span className="lang">{repo.language}</span>}
-                        <span className="stars">⭐ {repo.stars}</span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
+                <RepoList repos={report.topRepos} />
               </div>
             )}
 
