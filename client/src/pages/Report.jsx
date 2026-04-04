@@ -5,6 +5,7 @@ import ScoreCard from '../components/ScoreCard';
 import RadarChart from '../components/RadarChart';
 import LanguageBarChart from '../components/LanguageBarChart';
 import RepoList from '../components/RepoList';
+import HeatMap from '../components/HeatMap';
 import './Report.css';
 
 const Report = () => {
@@ -22,7 +23,11 @@ const Report = () => {
         setReport(response.data);
         setError(null);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load report');
+        setError(
+          err.response?.data?.message ||
+          err.response?.data?.error ||
+          'Failed to load report'
+        );
         console.error('Error fetching report:', err);
       } finally {
         setLoading(false);
@@ -138,6 +143,12 @@ const Report = () => {
             {report?.topRepos && (
               <div className="report-section">
                 <RepoList repos={report.topRepos} />
+              </div>
+            )}
+
+            {report?.heatmapData && report.heatmapData.length > 0 && (
+              <div className="report-section">
+                <HeatMap data={report.heatmapData} />
               </div>
             )}
 

@@ -45,14 +45,20 @@
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
   padding: 0.5rem 1rem;
   border-radius: 4px;
 }
 
-.navbar-link:hover {
-  color: #3498db;
-  background-color: rgba(52, 152, 219, 0.1);
+.navbar-link:hover,
+.navbar-link-active {
+  color: #fff;
+  background-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
+}
+
+.navbar-link-active {
+  font-weight: 600;
 }
 
 /* Responsive design */

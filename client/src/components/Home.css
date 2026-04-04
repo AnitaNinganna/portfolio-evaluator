@@ -53,3 +53,22 @@
 .feature p {
   opacity: 0.8;
 }
+
+.feature {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background-color 0.25s ease;
+}
+
+.feature:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.17);
+}
+
+.home-header h1 {
+  animation: float-title 3s ease-in-out infinite;
+}
+
+@keyframes float-title {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}

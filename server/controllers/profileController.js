@@ -46,6 +46,7 @@ const getProfile = async (req, res) => {
       repos: githubData.repos,
       languages: githubData.languages,
       topRepos: githubData.topRepos,
+      heatmapData: githubData.heatmapData,
       scoring,
       report,
     });

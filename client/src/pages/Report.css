@@ -231,6 +231,7 @@
   word-wrap: break-word;
 }
 
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .profile-header {
