@@ -13,34 +13,59 @@ const getProfile = async (req, res) => {
   }
 
   try {
-    console.log(`📡 Fetching GitHub data for: ${username}`);
-    
-    // Step 1: Fetch and structure GitHub data
+    console.log(`📡 Checking cache for: ${username}`);
+
+    // Step 1: Check if report exists in database (cache)
+    const existingReport = await Report.findOne({ username }).sort({ createdAt: -1 });
+
+    if (existingReport) {
+      console.log(`✅ Found cached report for: ${username}`);
+      // Return cached data with share URL
+      return res.json({
+        profile: existingReport.profile,
+        repos: existingReport.repos || [],
+        languages: existingReport.languages || [],
+        topRepos: existingReport.topRepos || [],
+        heatmapData: existingReport.heatmapData || [],
+        scoring: existingReport.scoring,
+        report: existingReport.report,
+        shareUrl: `${process.env.CLIENT_URL || 'http://localhost:5173'}/report/${username}`,
+        cached: true,
+        createdAt: existingReport.createdAt,
+      });
+    }
+
+    console.log(`📡 No cache found, fetching GitHub data for: ${username}`);
+
+    // Step 2: Fetch and structure GitHub data
     const githubData = await getCompleteGitHubData(username);
 
-    // Step 2: Generate scoring evaluation
+    // Step 3: Generate scoring evaluation
     console.log(`✅ GitHub data fetched, generating scores...`);
     const scoring = generateCompleteScore(githubData);
 
-    // Step 3: Generate human-readable report
+    // Step 4: Generate human-readable report
     const report = generateReport(scoring, githubData);
 
-    // Step 4: Save evaluation to database (if MongoDB is connected)
+    // Step 5: Save evaluation to database
     try {
       const newReport = new Report({
         username,
         profile: githubData.profile,
+        repos: githubData.repos,
+        languages: githubData.languages,
+        topRepos: githubData.topRepos,
+        heatmapData: githubData.heatmapData,
         scoring,
         report,
       });
       await newReport.save();
       console.log(`✅ Report saved for user: ${username}`);
     } catch (dbError) {
-      // Log error but don't fail the API response
       console.warn(`⚠️ Failed to save report to DB: ${dbError.message}`);
     }
 
-    // Step 5: Return comprehensive response
+    // Step 6: Return comprehensive response
     return res.json({
       profile: githubData.profile,
       repos: githubData.repos,
@@ -49,11 +74,13 @@ const getProfile = async (req, res) => {
       heatmapData: githubData.heatmapData,
       scoring,
       report,
+      shareUrl: `${process.env.CLIENT_URL || 'http://localhost:5173'}/report/${username}`,
+      cached: false,
     });
   } catch (error) {
     console.error("❌ Error fetching GitHub profile:", error.message);
     console.error("Full error:", error);
-    
+
     if (error.status === 404) {
       return res.status(404).json({ error: "GitHub user not found" });
     }
@@ -63,7 +90,7 @@ const getProfile = async (req, res) => {
     if (error.message.includes("API rate limit")) {
       return res.status(429).json({ error: "GitHub API rate limit exceeded" });
     }
-    
+
     return res.status(500).json({ error: "Server Error", details: error.message });
   }
 };

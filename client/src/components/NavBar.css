@@ -31,23 +31,43 @@
 
 .navbar-menu {
   display: flex;
+  flex-wrap: wrap;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .navbar-item {
-  margin-left: 2rem;
+  margin-left: 1rem;
 }
 
 .navbar-link {
   color: #ecf0f1;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   transition: color 0.3s ease, background-color 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.55rem 0.9rem;
+  border-radius: 9999px;
+}
+
+.navbar-link-secondary {
+  color: #d1d5db;
+}
+
+.navbar-button {
+  background: #4f46e5;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.navbar-link:hover,
+.navbar-link-active,
+.navbar-button:hover {
+  color: #fff;
+  background-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.25);
 }
 
 .navbar-link:hover,

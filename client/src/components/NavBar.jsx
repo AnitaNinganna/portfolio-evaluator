@@ -7,7 +7,7 @@ const NavBar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <NavLink to="/" className="navbar-logo">
-          Portfolio Evaluator
+          Developer Portfolio Evaluator
         </NavLink>
 
         <ul className="navbar-menu">
@@ -30,6 +30,19 @@ const NavBar = () => {
             >
               About
             </NavLink>
+          </li>
+          <li className="navbar-item">
+            <a href="#" className="navbar-link navbar-link-secondary">
+              Docs
+            </a>
+          </li>
+          <li className="navbar-item">
+            <a href="#" className="navbar-link navbar-link-secondary">
+              API
+            </a>
+          </li>
+          <li className="navbar-item">
+            <button className="navbar-link navbar-button">Sign In</button>
           </li>
         </ul>
       </div>

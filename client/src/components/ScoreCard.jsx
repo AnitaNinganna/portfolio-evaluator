@@ -26,8 +26,18 @@ const ScoreCard = ({ score = 0, scoringData = {} }) => {
     return '#e74c3c'; // Red
   };
 
-  const scoreColor = getScoreColor(normalizedScore);
+  // Determine tier based on score
+  const getTier = (score) => {
+    if (score >= 90) return 'Expert';
+    if (score >= 80) return 'Advanced';
+    if (score >= 70) return 'Proficient';
+    if (score >= 60) return 'Intermediate';
+    if (score >= 50) return 'Developing';
+    return 'Beginner';
+  };
+
   const tier = getTier(normalizedScore);
+  const scoreColor = getScoreColor(normalizedScore);
 
   // Extract breakdown data
   const portfolio = scoringData?.portfolio || {};
@@ -70,7 +80,7 @@ const ScoreCard = ({ score = 0, scoringData = {} }) => {
         </div>
         <div className="score-description">
           <h3>Portfolio Score</h3>
-          <p className={`score-rating rating-${getTier(normalizedScore).toLowerCase()}`}>
+          <p className={`score-rating rating-${tier.toLowerCase()}`}>
             {tier.toUpperCase()}
           </p>
           <button 

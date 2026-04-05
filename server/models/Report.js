@@ -61,12 +61,43 @@ const reportSchema = new mongoose.Schema(
       },
     },
 
-    // Human-readable report
-    report: {
-      strengths: [String],
-      improvements: [String],
-      nextSteps: [String],
-    },
+    // Repository data snapshot
+    repos: [{
+      name: String,
+      stars: Number,
+      forks: Number,
+      language: String,
+      topics: [String],
+      hasLicense: Boolean,
+      hasReadme: Boolean,
+      url: String,
+      description: String,
+    }],
+
+    // Language distribution
+    languages: [{
+      name: String,
+      percent: String,
+    }],
+
+    // Top repositories
+    topRepos: [{
+      name: String,
+      stars: Number,
+      forks: Number,
+      language: String,
+      topics: [String],
+      hasLicense: Boolean,
+      hasReadme: Boolean,
+      url: String,
+      description: String,
+    }],
+
+    // Contribution heatmap data
+    heatmapData: [{
+      date: String,
+      count: Number,
+    }],
 
     // Metadata
     evaluatedAt: {

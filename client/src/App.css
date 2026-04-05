@@ -8,15 +8,21 @@
 h1 {
   font-size: 3.2em;
   margin-bottom: 30px;
-  color: #646cff;
+  color: #1f2937;
 }
 
 p {
   font-size: 1.1em;
   margin: 20px 0;
-  color: rgba(255, 255, 255, 0.87);
+  color: #4b5563;
 }
 
 .App {
-  padding-top: 80px; /* Adjust for fixed navbar height */
+  padding-top: 90px; /* Adjust for fixed navbar height */
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
 }
