@@ -13,13 +13,10 @@ const getProfile = async (req, res) => {
   }
 
   try {
-    console.log(`📡 Checking cache for: ${username}`);
-
     // Step 1: Check if report exists in database (cache)
     const existingReport = await Report.findOne({ username }).sort({ createdAt: -1 });
 
     if (existingReport) {
-      console.log(`✅ Found cached report for: ${username}`);
       // Return cached data with share URL
       return res.json({
         profile: existingReport.profile,
@@ -35,13 +32,10 @@ const getProfile = async (req, res) => {
       });
     }
 
-    console.log(`📡 No cache found, fetching GitHub data for: ${username}`);
-
     // Step 2: Fetch and structure GitHub data
     const githubData = await getCompleteGitHubData(username);
 
     // Step 3: Generate scoring evaluation
-    console.log(`✅ GitHub data fetched, generating scores...`);
     const scoring = generateCompleteScore(githubData);
 
     // Step 4: Generate human-readable report
@@ -60,9 +54,8 @@ const getProfile = async (req, res) => {
         report,
       });
       await newReport.save();
-      console.log(`✅ Report saved for user: ${username}`);
     } catch (dbError) {
-      console.warn(`⚠️ Failed to save report to DB: ${dbError.message}`);
+      // Silent catch for DB save errors
     }
 
     // Step 6: Return comprehensive response
@@ -78,9 +71,6 @@ const getProfile = async (req, res) => {
       cached: false,
     });
   } catch (error) {
-    console.error("❌ Error fetching GitHub profile:", error.message);
-    console.error("Full error:", error);
-
     if (error.status === 404) {
       return res.status(404).json({ error: "GitHub user not found" });
     }
@@ -103,8 +93,6 @@ const compareUsers = async (req, res) => {
   }
 
   try {
-    console.log(`📡 Comparing users: ${u1} vs ${u2}`);
-
     // Helper function to get user data
     const getUserData = async (username) => {
       // Check cache first
@@ -141,7 +129,7 @@ const compareUsers = async (req, res) => {
         });
         await newReport.save();
       } catch (dbError) {
-        console.warn(`⚠️ Failed to save report to DB: ${dbError.message}`);
+        // Silent catch for DB save errors
       }
 
       return {
@@ -167,9 +155,6 @@ const compareUsers = async (req, res) => {
       user2: user2Data,
     });
   } catch (error) {
-    console.error("❌ Error comparing users:", error.message);
-    console.error("Full error:", error);
-
     if (error.status === 404) {
       return res.status(404).json({ error: "One or both GitHub users not found" });
     }
