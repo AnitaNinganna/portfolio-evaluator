@@ -95,4 +95,93 @@ const getProfile = async (req, res) => {
   }
 };
 
-module.exports = { getProfile };
+const compareUsers = async (req, res) => {
+  const { u1, u2 } = req.query;
+
+  if (!u1 || !u2) {
+    return res.status(400).json({ error: "Both usernames are required" });
+  }
+
+  try {
+    console.log(`📡 Comparing users: ${u1} vs ${u2}`);
+
+    // Helper function to get user data
+    const getUserData = async (username) => {
+      // Check cache first
+      const existingReport = await Report.findOne({ username }).sort({ createdAt: -1 });
+      if (existingReport) {
+        return {
+          profile: existingReport.profile,
+          repos: existingReport.repos || [],
+          languages: existingReport.languages || [],
+          topRepos: existingReport.topRepos || [],
+          heatmapData: existingReport.heatmapData || [],
+          scoring: existingReport.scoring,
+          report: existingReport.report,
+          cached: true,
+        };
+      }
+
+      // Fetch fresh data
+      const githubData = await getCompleteGitHubData(username);
+      const scoring = generateCompleteScore(githubData);
+      const report = generateReport(scoring, githubData);
+
+      // Save to cache
+      try {
+        const newReport = new Report({
+          username,
+          profile: githubData.profile,
+          repos: githubData.repos,
+          languages: githubData.languages,
+          topRepos: githubData.topRepos,
+          heatmapData: githubData.heatmapData,
+          scoring,
+          report,
+        });
+        await newReport.save();
+      } catch (dbError) {
+        console.warn(`⚠️ Failed to save report to DB: ${dbError.message}`);
+      }
+
+      return {
+        profile: githubData.profile,
+        repos: githubData.repos,
+        languages: githubData.languages,
+        topRepos: githubData.topRepos,
+        heatmapData: githubData.heatmapData,
+        scoring,
+        report,
+        cached: false,
+      };
+    };
+
+    // Fetch data for both users
+    const [user1Data, user2Data] = await Promise.all([
+      getUserData(u1),
+      getUserData(u2)
+    ]);
+
+    return res.json({
+      user1: user1Data,
+      user2: user2Data,
+    });
+  } catch (error) {
+    console.error("❌ Error comparing users:", error.message);
+    console.error("Full error:", error);
+
+    if (error.status === 404) {
+      return res.status(404).json({ error: "One or both GitHub users not found" });
+    }
+    if (error.message.includes("Bad credentials")) {
+      return res.status(401).json({ error: "Invalid GitHub token" });
+    }
+    if (error.message.includes("API rate limit")) {
+      return res.status(429).json({ error: "GitHub API rate limit exceeded" });
+    }
+
+    return res.status(500).json({ error: "Server Error", details: error.message });
+  }
+};
+
+module.exports = { getProfile, compareUsers };

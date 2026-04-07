@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ScoreCard.css';
 
-const ScoreCard = ({ score = 0, scoringData = {} }) => {
+const ScoreCard = ({ score = 0, scoringData = {}, isWinner = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [animateScore, setAnimateScore] = useState(false);
 
@@ -45,7 +45,7 @@ const ScoreCard = ({ score = 0, scoringData = {} }) => {
   const diversity = scoringData?.diversity || {};
 
   return (
-    <div className="score-card">
+    <div className={`score-card ${isWinner ? 'winner' : ''}`}>
       <div className="score-card-content">
         <div className="circular-progress">
           <svg width="150" height="150" viewBox="0 0 150 150">

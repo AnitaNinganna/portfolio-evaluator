@@ -23,6 +23,16 @@ const NavBar = () => {
           </li>
           <li className="navbar-item">
             <NavLink
+              to="/compare"
+              className={({ isActive }) =>
+                `navbar-link ${isActive ? 'navbar-link-active' : ''}`
+              }
+            >
+              Compare
+            </NavLink>
+          </li>
+          <li className="navbar-item">
+            <NavLink
               to="/about"
               className={({ isActive }) =>
                 `navbar-link ${isActive ? 'navbar-link-active' : ''}`

@@ -303,6 +303,28 @@
   flex-shrink: 0;
 }
 
+/* Winner styling */
+.score-card.winner {
+  border: 3px solid #2ecc71;
+  box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3);
+  position: relative;
+}
+
+.score-card.winner::before {
+  content: '🏆 WINNER';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2ecc71;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .score-card {
