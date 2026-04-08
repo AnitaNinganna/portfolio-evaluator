@@ -35,6 +35,28 @@ Frontend runs on: `http://localhost:5173`
 
 Visit `http://localhost:5000/api/health` to verify backend is running.
 
+## Deployment
+
+### Frontend Deployment (Vercel)
+```bash
+# Ensure code is pushed to GitHub repository
+git add .
+git commit -m "Ready for deployment"
+git push origin main
+
+# Deploy to Vercel
+# 1. Go to vercel.com and sign in
+# 2. Click "New Project"
+# 3. Import your GitHub repository
+# 4. Vercel will detect the project settings from vercel.json
+# 5. In project settings, add environment variable:
+#    - Name: VITE_API_URL
+#    - Value: https://your-backend-url.com/api (replace with your deployed backend URL)
+# 6. Deploy
+```
+
+Frontend will be deployed to: Vercel URL (provided after deployment)
+
 ## Day 1 Checklist
 
 - [x] Backend running on port 5000

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { API } from '../utils/api';
+import API from '../utils/api';
 import ScoreCard from '../components/ScoreCard';
 import RadarChart from '../components/RadarChart';
 import './Compare.css';
