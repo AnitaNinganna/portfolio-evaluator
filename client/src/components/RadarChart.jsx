@@ -19,34 +19,76 @@ ChartJS.register(
   Legend
 );
 
-const RadarChart = ({ user1, user2 }) => {
-  const data = {
-    labels: ['Activity', 'Code Quality', 'Diversity', 'Community', 'Hiring Readiness'],
-    datasets: [
-      {
-        label: user1.name,
-        data: [user1.scores.activity, user1.scores.codeQuality, user1.scores.diversity, user1.scores.community, user1.scores.hiringReadiness],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-      },
-      {
-        label: user2.name,
-        data: [user2.scores.activity, user2.scores.codeQuality, user2.scores.diversity, user2.scores.community, user2.scores.hiringReadiness],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-      },
-    ],
+const RadarChart = ({ user1 = {}, user2 = {}, scores }) => {
+  const labels = ['Activity', 'Code Quality', 'Diversity', 'Community', 'Hiring Readiness'];
+
+  const buildSingleData = () => {
+    return [
+      scores?.activity ?? 0,
+      scores?.codeQuality ?? 0,
+      scores?.diversity ?? 0,
+      scores?.community ?? 0,
+      scores?.hiringReadiness ?? 0,
+    ];
   };
+
+  const buildUserData = (user) => {
+    return [
+      user?.scores?.activity ?? 0,
+      user?.scores?.codeQuality ?? 0,
+      user?.scores?.diversity ?? 0,
+      user?.scores?.community ?? 0,
+      user?.scores?.hiringReadiness ?? 0,
+    ];
+  };
+
+  const isComparison = !!user1.name && !!user2.name && !scores;
+
+  const data = {
+    labels,
+    datasets: isComparison
+      ? [
+          {
+            label: user1.name || 'User 1',
+            data: buildUserData(user1),
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+          },
+          {
+            label: user2.name || 'User 2',
+            data: buildUserData(user2),
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+          },
+        ]
+      : [
+          {
+            label: user1.name || 'Profile Score',
+            data: buildSingleData(),
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+          },
+        ],
+  };
+
+  const chartTitle = isComparison
+    ? `${user1.name || 'User 1'} vs ${user2.name || 'User 2'} - Portfolio Comparison`
+    : `${user1.name || 'Your profile'} - Portfolio Overview`;
 
   const options = {
     responsive: true,
@@ -57,7 +99,7 @@ const RadarChart = ({ user1, user2 }) => {
       },
       title: {
         display: true,
-        text: `${user1.name} vs ${user2.name} - Portfolio Comparison`,
+        text: chartTitle,
         font: {
           size: 16,
         },

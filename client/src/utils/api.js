@@ -1,7 +1,30 @@
 import axios from "axios";
 
+const rawBaseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const normalizeBaseURL = (url) => {
+  const value = typeof url === "string" ? url.trim() : "";
+  if (!value) {
+    return "http://localhost:5000/api";
+  }
+
+  if (value.startsWith("http://") || value.startsWith("https://")) {
+    return value;
+  }
+
+  if (value.startsWith(":")) {
+    return `http://localhost${value}`;
+  }
+
+  if (value.startsWith("//")) {
+    return `${window.location.protocol}${value}`;
+  }
+
+  return `http://${value}`;
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: normalizeBaseURL(rawBaseURL),
   timeout: 30000, // 30 seconds timeout
 });
 
